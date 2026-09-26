@@ -1,0 +1,32 @@
+{
+  "kind": "evm_project",
+  "token": {
+    "contract": "IMDToken",
+    "name": "IdentityMD",
+    "symbol": "IMD",
+    "decimals": 18
+  },
+  "contracts": [
+    {
+      "contract": "CoinFlip",
+      "constructorArgs": [
+        "$token",
+        "$owner",
+        "0x9ddfaca8183c41ad55329bdeed9f6a8d53168b1b",
+        "1",
+        "0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae",
+        "10",
+        "200000",
+        "1000000000000000000",
+        "1000000000000000000000"
+      ]
+    }
+  ],
+  "pool": {
+    "pairedCurrency": "0x0000000000000000000000000000000000000000",
+    "fee": 3000,
+    "tickSpacing": 60,
+    "initialPrice": "79228162514264337593543950336"
+  },
+  "notes": "Contract-stage manifest for the accepted IMDToken and CoinFlip implementations on Sepolia. IMDToken has no constructor arguments. CoinFlip arguments are, in order: launch token, policy owner, VRF coordinator, subscription ID, key hash, confirmations, callback gas limit, minimum stake and maximum stake. The coordinator and 500 gwei key hash follow https://docs.chain.link/vrf/v2-5/supported-networks#ethereum-sepolia-testnet. Selected parameters are 10 confirmations, 200000 callback gas and stakes of 1-1000 IMD. REVIEW FINDING: constructor argument 4 is the provisional nonzero value 1 used in the accepted local deployment test; no launch-specific VRF subscription ID or operator authorization was supplied. This value is not evidence of an existing, controlled or funded subscription. Replace it with the authorized subscription ID and independently review the revised manifest before admission or deployment. The subscription ID is immutable; consumer registration or funding cannot correct a wrong ID after deployment. Before enabling play, the subscription operator must register CoinFlip and fund native ETH billing, and an authorized sponsor must provide IMD bankroll. No initialization calls are required. The policy owner can pause entry and withdraw only free bankroll. Each win credits twice the stake; losses pay zero. A separate 1% play fee is reserved for user rewards based on historical stake volume, with rounding dust retained. Oracle failure can leave bets pending permanently; there is no timeout refund. The pool pairs with native ETH, has no hook and expresses initialPrice as decimal sqrtPriceX96. The factory supplies the LP and MerkleDistributor. Services apply the pinned policy, including any effective opening price, and handle publication, signed artifact linkage, admission, deployment and frontend startup. These notes do not authorize deployment or assert independent review or service approval."
+}
